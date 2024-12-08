@@ -3,12 +3,13 @@ import asyncio
 import websockets
 
 async def send_message():
-    async with websockets.connect("ws://localhost:8765") as websocket:
-        message = "Mateo Carrasco"
+    uri = "ws://localhost:8765"
+    async with websockets.connect(uri) as websocket:
+        message = "Mateo Carrasco Progra Distribuida"
+        print(f"Enviando mensaje: {message}")
         await websocket.send(message)
-        print(f"Sent message: {message}")
-
         response = await websocket.recv()
-        print(f"Received message: {response}")
+        print(f"Respuesta del servidor: {response}")
 
-asyncio.run(send_message())
+if __name__ == "__main__":
+    asyncio.run(send_message())

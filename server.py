@@ -1,16 +1,16 @@
-# server.py
 import asyncio
 import websockets
 
-async def hello(websocket, path):
-    name = await websocket.recv()
-    print(f"Received message: {name}")
+async def hello(websocket):
+    print("Cliente conectado")
+    async for message in websocket:
+        print(f"Mensaje recibido: {message}")
+        await websocket.send(f"Hola {message}")
 
-    response = f"Hello {name}!"
-    await websocket.send(response)
-    print(f"Sent message: {response}")
+async def main():
+    async with websockets.serve(hello, "0.0.0.0", 8765):
+        print("Servidor corriendo en ws://0.0.0.0:8765")
+        await asyncio.Future()  # Ejecutar indefinidamente
 
-start_server = websockets.serve(hello, "0.0.0.0", 8765)
-
-asyncio.get_event_loop().run_until_complete(start_server)
-asyncio.get_event_loop().run_forever()
+if __name__ == "__main__":
+    asyncio.run(main())
