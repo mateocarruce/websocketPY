@@ -1,17 +1,20 @@
-# Utiliza una imagen base de Python
-FROM python:3.11-slim
+# Usar una imagen base de Python
+FROM python:3.9
 
-# Establece el directorio de trabajo
+# Establecer el directorio de trabajo
 WORKDIR /app
 
-# Copia los archivos de tu proyecto al contenedor
+# Copiar los archivos de requerimientos
+COPY requirements.txt .
+
+# Instalar las dependencias
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copiar el código de la aplicación
 COPY . .
 
-# Instala las dependencias
-RUN pip install --no-cache-dir websockets
+# Exponer el puerto en el que el servidor escuchará
+EXPOSE 8000
 
-# Expone el puerto para el servidor WebSocket
-EXPOSE 8765
-
-# Comando para ejecutar el servidor
-CMD ["python", "server.py"]
+# Comando para iniciar la aplicación con uvicorn
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
